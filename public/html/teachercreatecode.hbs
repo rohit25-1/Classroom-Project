@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Exam Code</title>
+    <link rel="stylesheet" href="/teachercreatecode.css">
+    <link rel="shortcut icon" href="/assets/teacher-logo.png" type="image/x-icon">
+    <script src="/js/teachercreatecode.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="heading">
+            <h1>Welcome to Create Exam Hall, {{name}}.</h1>
+            <h5 style="margin-top: 3px;">Please Click On Generate Code And Upload Question Paper, Set Time And Duration
+                For Exam</h5>
+        </div>
+        <form action="/register-exam" method="post" enctype="multipart/form-data">
+        <div class="inputCode">
+            <p class="label">Code: </p>
+            <input type="text" name="examcode" id="examcode" maxlength="5" placeholder="click on generate code"
+                required>
+            <input type="button" class="generateButton" onclick="makeid(5)" value="Generate" required></input>
+            <p class="label">Subject:</p>
+            <input type="text" name="subject" id="subject" required>
+            <p class="label">Semester:</p>
+            <input type="number" name="semester" id="semester" required>
+            <p class="label">Date:</p>
+            <input type="date" name="date" id="date" required>
+            <p class="label">Time:</p>
+            <input type="time" name="time" id="time" required>
+            <p class="label">Question Paper</p>
+            <input type="button" class="generateButton" onclick="uploadQP()" value="Upload"></input>
+            <input type="file" name="questionp" id="fileUpload" hidden required>
+            <button type="submit" class="generateButton block">Create
+                    Exam</button>
+        </div>
+        </form>
+    </div>
+
+</body>
+
+</html>

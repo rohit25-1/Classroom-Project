@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  width: 100vw;
+  height: 140vh;
+  background: #0d1117;
+}
+
+input {
+  width: 50%;
+  height: 2.3rem;
+  margin-bottom: 10px;
+  padding: 9px;
+  border-radius: 4px;
+  border: none;
+  background-color: rgb(230, 230, 230);
+}
+
+.inputbox {
+  margin-bottom: 20px;
+}
+
+.headings {
+  margin-bottom: 30px;
+}
+
+.mainheading {
+  font-size: 2rem;
+}
+
+.subheading {
+  color: rgb(206, 206, 206);
+}
+
+.namebox {
+  margin-bottom: 5px;
+  width: 50%;
+}
+
+hr{
+  margin-bottom: 30px;
+  box-shadow: 0px 0px 100px 1px white;
+}
+.container {
+  position: relative;
+  top:100px;
+  width: 48rem;
+  margin: auto;
+  background-color: #0d1117;
+  box-shadow: 0px 0px 25px 10px rgb(48, 48, 48);
+  color: white;
+  padding: 40px;
+  border-radius: 20px;
+}
+
+.inline {
+  display: inline;
+}
+
+.loginerror {
+  float: right;
+  font-size: small;
+  display: none;
+  color: rgb(194, 54, 54);
+  animation: blink 2.5s linear infinite;
+}
+
+.password{
+  animation: none;
+}
+
+
+h1 {
+  font-size: 40px;
+  margin-bottom: 40px;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+
+button {
+  text-align: center;
+  width: 30%;
+  border: none;
+  height: 2.3rem;
+  color: white;
+  background-color: rgb(117, 203, 246);
+  margin: 30px 0px 10px 0px;
+  border-radius: 4px;
+}

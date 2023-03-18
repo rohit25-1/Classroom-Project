@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Exam</title>
+    <link rel="stylesheet" href="/teachercreateexam.css">
+    <link rel="stylesheet" href="https://kit.fontawesome.com/52a1890fd9.css" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/52a1890fd9.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="/assets/teacher-logo.png" type="image/x-icon">
+</head>
+
+<body>
+    {{>teacherheader}}
+
+    <div class="pageContents">
+        <div class="heading">
+            <h1>Upcoming Exams</h1>
+            <a href="/teacher/examcode" class="inline">
+                <div class="examCode">
+                    <i class="fa-solid fa-plus"></i>
+                    <p>Create Exam</p>
+                </div>
+            </a>
+        </div>
+        <ul>
+            {{#each records}}
+                <a href="/teacher/qpaper?file={{name}}">
+                    <div class="examContainer">
+
+                    <div class="examName"><img src="/assets/datastructures.png" alt=""> {{subject}}
+                    </div>
+                    <div class="right">
+                        <div class="examStart">Exam Code: {{examcode}}</div>
+                        <div class="examStart">Exam Start: {{time}}</div>
+                        <div class="examDuration">Exam Date: {{date}}</div>
+                    </div>
+                    </div>
+                </a>
+            {{/each}}
+        </ul>
+        
+
+    </div>
+
+</body>
+
+</html>

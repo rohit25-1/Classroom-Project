@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Structures With C</title>
+    <link rel="stylesheet" href="/teacherqpaper.css">
+    <link rel="shortcut icon" href="/assets/teacher-logo.png" type="image/x-icon">
+    <script src="https://kit.fontawesome.com/52a1890fd9.js" crossorigin="anonymous"></script>
+</head>
+
+
+
+<script>
+    function fileUpload() {
+        document.getElementsByClassName("hidden-file")[0].click()
+    }
+    function submitForm() {
+        document.getElementsByClassName("hidden-submit")[0].click()
+    }
+</script>
+
+<body>
+    {{>teacherheader}}
+
+
+    <div class="pageContents">
+        <div class="heading">
+            <h1>{{subject}}</h1>
+
+            <div class="questionPaper">
+                <iframe src="/assets/QuestionPapers/{{name}}" width="800" height="900">
+                </iframe>
+            </div>
+        </div>
+
+</body>
+
+</html>

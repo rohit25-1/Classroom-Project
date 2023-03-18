@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/teacherhome.css">
+    <link rel="shortcut icon" href="/assets/teacher-logo.png" type="image/x-icon">
+    <title>Teacher</title>
+</head>
+
+<body>
+    {{>teacherheader}}
+
+    <div class="container">
+        <div class="welcomeheading block">
+            <h1>Welcome To Classroom, {{name}}</h1>
+        </div>
+
+        <div class="desc">
+
+            <div class="examhall inline">
+                <div class="descheading">
+                    <h2>Create Exam
+                    </h2>
+                </div>
+                <p class="examhalldesc white">
+                    Here you can create an exam by generating a login code. You can access all upcoming exams created by
+                    you here.
+                </p>
+            </div>
+            <div class="examhistory inline">
+                <div class="descheading">
+                    <h2>Exam History
+                    </h2>
+                </div>
+                <p class="examhistorydesc white">
+                    Here you can access previously created exams which will be available to valuation.
+                </p>
+            </div>
+            <div class="studentlist inline">
+                <div class="descheading">
+                    <h2>Student List
+                    </h2>
+                </div>
+                <p class="examhistorydesc white">
+                    Here you add, edit, view the students of a classroom.
+                </p>
+            </div>
+            <div class="profile inline">
+                <div class="descheading">
+                    <h2>Profile
+                    </h2>
+                </div>
+                <p class="profiledesc white">
+                    Here you can access your teacher profile. For any changes please contact the respective department.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

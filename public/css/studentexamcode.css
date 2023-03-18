@@ -1,0 +1,148 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background: #0d1117;
+}
+
+nav {
+  width: 100%;
+  height: 5rem;
+  background-color: #161b22;
+  backdrop-filter: blur(10px);
+  box-shadow: 0px 0px 30px 2px rgb(47, 53, 67);
+}
+
+li {
+  display: inline;
+  list-style: none;
+  margin-right: 30px;
+  /* border: 1px solid red; */
+  font-size: 18px;
+  padding: 10px 23px;
+  border-radius: 10px;
+  position: relative;
+}
+
+li:hover {
+  color: rgb(255, 255, 255);
+  transition: color 300ms;
+}
+
+a {
+  text-decoration: none;
+  color: rgb(225, 225, 225);
+}
+
+li:hover {
+  box-shadow: 0px 0px 20px 2px #45566e;
+}
+
+.navElements {
+  width: 90%;
+  position: relative;
+  top: 35%;
+  margin: auto;
+}
+
+img {
+  width: 50px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 60px 1px rgb(65, 65, 73);
+}
+
+.image {
+  background-color: transparent;
+  padding: 0;
+  position: relative;
+  top: -12px;
+  float: right;
+}
+
+.image:hover {
+  box-shadow: none;
+}
+.container {
+  width: 30rem;
+  height: 28rem;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  margin: auto;
+  position: relative;
+  top: 10%;
+  box-shadow: 0px 0px 20px 1px #2b384b;
+  background-color: #0d1117;
+  color: white;
+  padding: 55px 25px;
+}
+
+.inputCode {
+  position: relative;
+  top: 10%;
+}
+
+.label {
+  margin-left: 3px;
+}
+input {
+  width: 80%;
+  height: 3rem;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.enterButton {
+  margin-top: 30px;
+  width: 40%;
+  height: 2.3rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background-color: #00d5ffd7;
+}
+
+.enterButton:hover {
+  transform: translateX(10px) translateY(10px) scale(1.1);
+  transition: transform 300ms;
+}
+
+.dropdown {
+  width: 100px;
+  height: 100px;
+  float: right;
+  display: flex;
+  flex-direction: column;
+}
+
+.menuitems {
+  display: none;
+  position: relative;
+  top: -5px;
+  right: 20px;
+  color: white;
+  width: 160px;
+  height: 50px;
+  border-radius: 10px;
+  text-align: center;
+  background-color: #28313d66;
+  backdrop-filter: blur(200px);
+}
+
+.logout{
+  position: relative;
+  top: 25%;
+}
+
+
+.dropdown:hover .menuitems {
+  display: block;
+  /* transition: display 300ms; */
+}

@@ -1,0 +1,68 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="/assets/teacher-logo.png" type="image/x-icon" />
+  <link rel="stylesheet" href="/teacherlogin.css" />
+  <script src="/teacherlogin.js"></script>
+  <title>Teacher Login</title>
+</head>
+
+<script>
+
+  function check() {
+    let password = document.querySelector("#password").value;
+    let disButton = document.querySelector(".disabledbutton"); let buttonColour
+      = document.querySelector(".button"); if (password.length >= 8) {
+        disButton.style.pointerEvents = "auto"; buttonColour.style.backgroundColor =
+          "rgb(65, 179, 235)";
+      } else {
+        disButton.style.pointerEvents = "none";
+      buttonColour.style.backgroundColor = "rgb(117, 203, 246)";
+    }
+  }
+</script>
+
+<body>
+  <div class="login-container">
+    <div class="headings">
+      <h2 class="mainheading">Teacher Sign In</h2>
+      <h4 class="subheading">login into classroom</h4>
+      <h5 style="color:rgb(255, 0, 0)">{{error}}</h5>
+      <h5 style="color:rgba(0, 255, 72, 0.674)">{{status}}</h5>
+    </div>
+    <form action="/teacher-login" method="post">
+      <div class="inputbox">
+        <div class="namebox">
+          <p class="inputname">Teacher ID</p>
+        </div>
+        <div class="input">
+          <input type="text" name="tid" id="tid" placeholder="Enter Teacher ID" />
+        </div>
+      </div>
+      <div class="inputbox">
+        <div class="namebox">
+          <p class="inputname">Password</p>
+        </div>
+        <div class="input">
+          <input type="password" name="password" id="password" placeholder="Enter your password" oninput="check()" />
+        </div>
+      </div>
+      <div class="button">
+        <a href="javascript:void(0)" onclick="document.querySelector('form').submit()" class="disabledbutton">
+          <div class="signin">Sign In</div>
+        </a>
+      </div>
+      <div class="loginfooter">
+        <a class="forgotpassword" href="/teacher/forgotpassword">Forgot
+          Password?</a>
+        <a href="/teacher/create-account" class="signup">Don't Have An
+          Account?</a>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>

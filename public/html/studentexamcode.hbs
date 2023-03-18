@@ -1,0 +1,34 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exam Code</title>
+  <link rel="shortcut icon" href="/assets/student-logo.png" type="image/x-icon" />
+  <link rel="stylesheet" href="/css/studentexamcode.css" />
+</head>
+
+<body>
+  {{>studentheader}}
+  <div class="container">
+    <div class="heading">
+      <h1>Welcome to Exam Hall, {{name}}.</h1>
+      <h4>Please Input The Exam Code Given By The Faculty To Enter The Exam
+        Hall</h4>
+      <h5 style="color:rgb(255, 0, 0)">{{error}}</h5>
+    </div>
+
+    <div class="inputCode">
+      <form action="/search-code" method="post">
+      <p class="label">Enter Code: </p>
+      <input type="text" name="examcode" id="examcode" maxlength="5" placeholder="eg: A17YT" />
+      <button class="enterButton" type="submit">Enter Exam Hall</button>
+      </form>
+    </div>
+
+  </div>
+
+</body>
+
+</html>

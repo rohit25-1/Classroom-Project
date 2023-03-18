@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="shortcut icon" href="/assets/student-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/studentprofile.css">
+</head>
+
+<body>
+    {{>studentheader}}
+
+    <div class="profileContainer">
+        <div class="pageContents">
+            <div class="heading">
+                <h1>Profile</h1>
+                </a>
+            </div>
+        </div>
+
+        <div class="image">
+            <img class="largeImage" src="/assets/79148508.jpeg" alt="profile">
+        </div>
+        <div class="fname innercontainer">
+            <p class="label inline">First Name: </p>
+            <p class="content inline">{{name}}</p>
+        </div>
+        <div class="dept innercontainer">
+            <p class="label inline">Department: </p>
+            <p class="content inline">{{dept}}</p>
+        </div>
+        <div class="semester innercontainer">
+            <p class="label inline">Semester: </p>
+            <p class="content inline">{{semester}}</p>
+        </div>
+        <div class="section innercontainer">
+            <p class="label inline">USN: </p>
+            <p class="content inline">{{usn}}</p>
+        </div>
+        <div class="section innercontainer">
+            <p class="label inline">Batch: </p>
+            <p class="content inline">2021-2025</p>
+        </div>
+        <hr>
+        <div class="faculty">
+            <h2 class="title">Faculties</h2>
+            <table border="1">
+                <tr>
+                    <td>Subjects</td>
+                    <td>DSC</td>
+                    <td>OOPS</td>
+                    <td>COA</td>
+                    <td>DLD</td>
+                    <td>MATH</td>
+                </tr>
+                <tr>
+                    <td>Faculty</td>
+                    <td>HS Guruprasad</td>
+                    <td>Nalini</td>
+                    <td>Sindhu K</td>
+                    <td>Mamtha</td>
+                    <td>Chaitra</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

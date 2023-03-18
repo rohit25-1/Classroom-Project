@@ -1,0 +1,60 @@
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="/assets/student-logo.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="/css/studenthome.css" />
+    <title>Student</title>
+  </head>
+
+  <body>
+    {{>studentheader}}
+
+    <div class="container">
+      <div class="welcomeheading block">
+        <h1>Welcome To Classroom, {{name}}</h1>
+      </div>
+
+      <div class="desc">
+
+        <div class="examhall inline">
+          <div class="descheading">
+            <h2>Exam Hall
+            </h2>
+          </div>
+          <p class="examhalldesc white">
+            Here you can attend an exam by entering a login code. List of
+            upcoming exams will appear here.
+          </p>
+        </div>
+        <div class="examhistory inline">
+          <div class="descheading">
+            <h2>Exam History
+            </h2>
+          </div>
+          <p class="examhistorydesc white">
+            Here you can access previously attended exams with score.
+          </p>
+        </div>
+        <div class="profile inline">
+          <div class="descheading">
+            <h2>Profile
+            </h2>
+          </div>
+          <p class="profiledesc white">
+            Here you can access your student profile. For any changes please
+            contact the respective faculty.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </body>
+
+</html>

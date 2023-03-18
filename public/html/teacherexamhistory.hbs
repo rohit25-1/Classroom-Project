@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam History</title>
+    <link rel="shortcut icon" href="/assets/teacher-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="/teacherexamhistory.css">
+</head>
+
+<body>
+    {{>teacherheader}}
+
+
+    <div class="pageContents">
+        <div class="heading">
+            <h1>Exam History</h1>
+        </div>
+
+        {{#each records}}
+        <a href="/teacher/qpaper?file={{name}}">
+            <div class="examContainer">
+
+                <div class="examName"><img src="/assets/datastructures.png" alt=""> {{subject}}
+                </div>
+                <div class="right">
+                    <div style="color: red;" class="examStart">Evaluated: {{evaluated}}</div>
+                    <div class="examDuration">Exam Date: {{date}}</div>
+                </div>
+            </div>
+        </a>
+        {{/each}}
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,156 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  width: 100vw;
+  height: 100vh;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background: #0d1117;
+}
+
+.imgcontainer {
+  position: absolute;
+  top: 15%;
+  left: 15%;
+  width: 33%;
+}
+
+.logoimage {
+  filter: drop-shadow(2px 4px 10px #585858);
+  width: 80%;
+  margin-top: 20px;
+}
+
+.logotext {
+  font-family: "IBM Plex Mono", monospace;
+  text-align: center;
+  margin-top: 30px;
+  font-size: 200%;
+  letter-spacing: 12px;
+  background: -webkit-radial-gradient(rgb(0, 132, 255), rgb(196, 79, 37));
+  border: none;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 7px 9px 13px #0051ff4a;
+  margin-bottom: 10px;
+}
+
+.button {
+  width: 317px;
+  height: 51px;
+  background: #d1c7c7;
+  border-radius: 4px;
+  margin: 28px;
+}
+.blue {
+  background-color: #34a0ce;
+}
+.left-login {
+  float: left;
+  width: 50%;
+  /* border: 1px solid red; */
+  height: 100vh;
+}
+
+.login-containers {
+  margin: auto;
+  width: max-content;
+  position: relative;
+  top: 35%;
+}
+
+.right-login {
+  float: right;
+  width: 49%;
+  /* border: 1px solid red; */
+  height: 100vh;
+}
+
+.buttonlogos {
+  width: 26px;
+  height: 27px;
+  background: url(/assets/student-logo.png);
+  position: relative;
+  top: 20%;
+  left: 20px;
+}
+
+.buttonlogot {
+  width: 29.08px;
+  height: 27px;
+  position: relative;
+  top: 20%;
+  left: 20px;
+  background: url(/assets/teacher-logo.png);
+}
+
+.buttontext {
+  text-decoration: none;
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+  position: relative;
+  bottom: 12px;
+  left: 20px;
+  letter-spacing: 3px;
+  color: white;
+}
+
+.button:hover {
+  transform: scale(1.04);
+  transition: transform 300ms ease-in-out;
+}
+
+.blue:hover {
+  box-shadow: 0px 0px 20px 0.2px #34a0ce;
+}
+
+.cream:hover {
+  box-shadow: 0px 0px 20px 0.2px #d1c7c7;
+}
+
+a {
+  text-decoration: none;
+}
+
+@media screen and (max-width: 885px) {
+  .mainpage {
+    display: flex;
+    flex-direction: column;
+  }
+  .logotext {
+    font-size: 100%;
+  }
+  .left-login {
+    position: relative;
+    width: 70%;
+    top: 30px;
+    margin: auto;
+    height: min-content;
+  }
+
+  .right-login {
+    height: min-content;
+    position: relative;
+    top: 54px;
+    width: min-content;
+    margin: auto;
+  }
+
+  .imgcontainer {
+    position: static;
+    width: 350px;
+    margin: auto;
+  }
+
+  .logoimage {
+    margin: auto;
+  }
+}

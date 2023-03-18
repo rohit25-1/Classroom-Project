@@ -1,0 +1,80 @@
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="/assets/student-logo.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="/css/studentlogin.css" />
+    <script src="/js/studentlogin.js"></script>
+    <title>Student Login</title>
+  </head>
+
+  <script>
+
+  </script>
+
+  <body>
+    <div class="login-container">
+      <div class="headings">
+        <h2 class="mainheading">Student Sign In</h2>
+        <h4 class="subheading">login into classroom</h4>
+        <h5 style="color:rgb(255, 0, 0)">{{error}}</h5>
+        <h5 style="color:rgba(0, 255, 72, 0.674)">{{status}}</h5>
+      </div>
+      <form action="/student-login" method="post">
+        <div class="inputbox">
+          <div class="namebox">
+            <p class="inputname inline">USN</p>
+            <p class="loginerror inline">Enter Valid USN</p>
+          </div>
+          <div class="input">
+            <input
+              type="text"
+              name="usn"
+              id="usn"
+              placeholder="Enter USN"
+              onclick="hide()"
+              oninput="check()"
+            />
+          </div>
+        </div>
+        <div class="inputbox">
+          <div class="namebox">
+            <p class="inputname">Password</p>
+          </div>
+          <div class="input">
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Enter your password"
+              onfocus="validate()"
+              oninput="check()"
+            />
+          </div>
+        </div>
+        <div class="button">
+          <a
+            href="javascript:void(0)"
+            onclick="document.querySelector('form').submit()"
+            class="disabledbutton"
+          >
+            <div class="signin">Sign In</div>
+          </a>
+        </div>
+        <div class="loginfooter">
+          <a class="forgotpassword" href="/student/forgotpassword">Forgot
+            Password?</a>
+          <a href="/student/create-account" class="signup">Don't Have An
+            Account?</a>
+        </div>
+      </form>
+    </div>
+  </body>
+
+</html>

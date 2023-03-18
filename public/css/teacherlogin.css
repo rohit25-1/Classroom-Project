@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  background: #0d1117;
+  /* background: url(assets/background.jpeg);
+  background-position: center;
+  background-size: cover; */
+}
+
+.login-container {
+  position: relative;
+  bottom: 2vh;
+  width: 28rem;
+  height: 30rem;
+  margin: auto;
+  background-color: #0d1117;
+  box-shadow: 0px 0px 25px 10px rgb(48, 48, 48);
+  color: white;
+  padding: 40px;
+  border-radius: 20px;
+}
+
+.headings {
+  margin-bottom: 30px;
+}
+
+.mainheading {
+  font-size: 2rem;
+}
+
+.subheading {
+  color: rgb(206, 206, 206);
+}
+
+.namebox {
+  margin-bottom: 5px;
+}
+
+input {
+  width: 90%;
+  height: 2.3rem;
+  margin-bottom: 10px;
+  padding: 9px;
+  border-radius: 4px;
+  border: none;
+  background-color: rgb(230, 230, 230);
+}
+
+.inputbox {
+  margin-bottom: 20px;
+}
+
+.button {
+  text-align: center;
+  width: 90%;
+  height: 2.3rem;
+  background-color: rgb(65, 179, 235);
+  background-color: rgb(117, 203, 246);
+  margin: 30px 0px 10px 0px;
+  border-radius: 4px;
+}
+
+.signin {
+  position: relative;
+  top: 15%;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+.loginfooter {
+  width: 90%;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.forgotpassword {
+  float: right;
+}
+
+.disabledbutton {
+  pointer-events: none;
+}
+
+@media screen and (max-width: 885px) {
+  .login-container {
+    position: relative;
+    top: 85px;
+    width: 22rem;
+    height: 28rem;
+  }
+  .mainheading {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .login-container {
+    position: relative;
+    top: 85px;
+    width: 20rem;
+    height: 27rem;
+  }
+}
