@@ -1,120 +1,95 @@
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Account</title>
-    <link rel="stylesheet" href="/createteacheraccount.css" />
-    <link
-      rel="shortcut icon"
-      href="/assets/teacher-logo.png"
-      type="image/x-icon"
-    />
-    <script src="/js/createteacheraccount.js"></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account</title>
+  <link rel="stylesheet" href="/createteacheraccount.css" />
+  <link rel="shortcut icon" href="/assets/teacher-logo.png" type="image/x-icon" />
+  <script src="/js/createteacheraccount.js"></script>
+</head>
 
-  <body>
-    <div class="container">
-      <h1>Create Account (Teacher)</h1>
-      <h4 style="color:red; font-size:large">{{error}}</h4>
-      <hr />
-      <form action="/teacher-register" method="post">
-        <div class="inputbox">
-          <div class="namebox">
-            <p class="namebox inline">Teacher ID</p>
-          </div>
-          <div class="input">
-            <input
-              type="text"
-              name="usn"
-              id="usn"
-              placeholder="Enter ID"
-              required
-            />
+<body>
+  <div class="container">
+    <h1>Create Account (Teacher)</h1>
+    <h4 style="color:red; font-size:large">{{error}}</h4>
+    <hr />
+    <form action="/teacher-register" method="post" enctype="multipart/form-data">
+      <div class="inputbox">
+        <div class="namebox">
+          <p class="namebox inline">Teacher ID</p>
+        </div>
+        <div class="input">
+          <input type="text" name="usn" id="usn" placeholder="Enter ID" required />
+        </div>
+      </div>
+      <div class="inputbox">
+        <div class="namebox inline">
+          <p class="namebox">Name</p>
+        </div>
+        <div class="input">
+          <input type="text" name="name" id="name" placeholder="Enter Name" />
+        </div>
+      </div>
+      <div class="inputbox">
+        <div class="namebox">
+          <p class="namebox inline">Phone Number</p>
+          <p class="loginerror inline phone">Enter Valid Phone Number</p>
+        </div>
+        <div class="input">
+          <input type="text" name="phno" id="phoneno" placeholder="Enter Phone Number" onfocusout="validatePhone()"
+            onfocus="hidePhone()" required />
+        </div>
+      </div>
+      <div class="inputbox">
+        <div class="namebox">
+          <p class="namebox inline">Email</p>
+          <p class="loginerror inline email">Enter Valid Email</p>
+        </div>
+        <div class="input">
+          <input type="email" name="email" id="email" placeholder="Enter Email" onfocusout="validateEmail()"
+            onfocus="hideEmail()" required />
+        </div>
+      </div>
+      <div class="inputbox">
+        <div class="namebox inline">
+          <p class="namebox">Department</p>
+        </div>
+        <div class="input">
+          <input type="text" name="dept" id="dept" placeholder="Enter Department" required />
+        </div>
+      </div>
+      <div class="inputbox">
+        <div class="namebox">
+          <p class="namebox inline">Password</p>
+          <div class="passwordContainer">
+            <p class="passwordCheck inline up special">Special Characters</p>
+            <p class="passwordCheck inline up upper">Uppercase</p>
+            <p class="passwordCheck inline up number">Numbers</p>
+            <p class="passwordCheck inline up length">Length > 7</p>
           </div>
         </div>
-        <div class="inputbox">
-          <div class="namebox inline">
-            <p class="namebox">Name</p>
-          </div>
-          <div class="input">
-            <input type="text" name="name" id="name" placeholder="Enter Name" />
-          </div>
+        <div class="input">
+          <input type="password" name="password" id="password" placeholder="Enter your password"
+            oninput="validatePassword()" required />
         </div>
-        <div class="inputbox">
-          <div class="namebox">
-            <p class="namebox inline">Phone Number</p>
-            <p class="loginerror inline phone">Enter Valid Phone Number</p>
-          </div>
-          <div class="input">
-            <input
-              type="text"
-              name="phno"
-              id="phoneno"
-              placeholder="Enter Phone Number"
-              onfocusout="validatePhone()"
-              onfocus="hidePhone()"
-              required
-            />
-          </div>
+      </div>
+      <div class="inputbox">
+        <div class="namebox">
+          <p class="namebox inline">Profile Picture</p>
         </div>
-        <div class="inputbox">
-          <div class="namebox">
-            <p class="namebox inline">Email</p>
-            <p class="loginerror inline email">Enter Valid Email</p>
-          </div>
-          <div class="input">
-            <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Enter Email"
-              onfocusout="validateEmail()"
-              onfocus="hideEmail()"
-              required
-            />
-          </div>
+        <div class="input">
+          <input type="file" name="profile-picture" id="" class="upload" hidden required />
+          <input type="button" value="Upload Picture" class="uploadButton" onclick="fileUpload()" />
         </div>
-        <div class="inputbox">
-          <div class="namebox inline">
-            <p class="namebox">Department</p>
-          </div>
-          <div class="input">
-            <input
-              type="text"
-              name="dept"
-              id="dept"
-              placeholder="Enter Department"
-              required
-            />
-          </div>
-        </div>
-        <div class="inputbox">
-          <div class="namebox">
-            <p class="namebox inline">Password</p>
-            <p class="loginerror inline password">Enter Valid Password</p>
-          </div>
-          <div class="input">
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Enter your password"
-              oninput="validatePassword()"
-              required
-            />
-          </div>
-        </div>
+      </div>
 
-        <div class="button">
-          <a href="javascript:void(0)"><button
-              class="disabledbutton"
-              type="submit"
-            >Create Account</button></a>
-        </div>
-      </form>
-    </div>
-  </body>
+      <div class="button">
+        <a href="javascript:void(0)"><button class="disabledbutton" type="submit">Create Account</button></a>
+      </div>
+    </form>
+  </div>
+</body>
 
 </html>

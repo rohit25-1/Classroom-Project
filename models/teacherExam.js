@@ -13,9 +13,8 @@ const examSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
   tid: {
-    type: Number,
+    type: String,
     required: true,
   },
   subject: {
@@ -34,10 +33,10 @@ const examSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  parsedDate:{
+  parsedDate: {
     type: Date,
     required: true,
-  }
+  },
 });
 
 const exam = new mongoose.model("Teacher Exam", examSchema);

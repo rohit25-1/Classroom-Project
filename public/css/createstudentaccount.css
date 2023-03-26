@@ -126,3 +126,27 @@ button {
 .passwordContainer {
   width: max-content;
 }
+
+.uploadButton {
+  display: block;
+  width: 200px;
+  height: 40px;
+  background-color: #01f080ea;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.uploadButton:hover {
+  transform: scale(1.02);
+  transition: transform 300ms;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}

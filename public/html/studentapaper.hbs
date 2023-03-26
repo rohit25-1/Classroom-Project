@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Sheets</title>
+    <link rel="stylesheet" href="/css/studentapaper.css">
+    <script src="https://kit.fontawesome.com/52a1890fd9.js" crossorigin="anonymous"></script>
+</head>
+
+
+<body>
+
+    {{>teacherheader}}
+    <div class="pageContents">
+        <div class="heading">
+            <h1>{{subject}} - {{studentname}} ({{usn}})</h1>
+            <form action="/update-marks/?id={{id}}" method="post">
+                <div class="marksContainer">
+                    <p>Enter Marks</p>
+                    <input type="number" name="marks" id="marks" class="marks" required>
+                </div>
+
+                <input type="submit" value="Evaluate" class="button">
+            </form>
+        </div>
+
+        <div class="questionPaper">
+            <iframe src="/assets/AnswerPapers/{{name}}" width="800" height="900">
+            </iframe>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -21,9 +21,11 @@
             </div>
         </div>
 
-        <div class="image">
+        {{!-- <div class="image">
             <img class="largeImage" src="/assets/teacher.png" alt="profile">
-        </div>
+        </div> --}}
+
+        <div class="circle-image" style="background-image: url('/assets/ProfilePictures/{{displaypicture}}');"></div>
         <div class="fname innercontainer">
             <p class="label inline">Name: </p>
             <p class="content inline">{{name}}</p>
@@ -43,28 +45,6 @@
         <div class="section innercontainer">
             <p class="label inline">Year Of Joining: </p>
             <p class="content inline">2003</p>
-        </div>
-        <hr>
-        <div class="faculty">
-            <h2 class="title">Faculties</h2>
-            <table border="1">
-                <tr>
-                    <td>Subjects</td>
-                    <td>DSC</td>
-                    <td>OOPS</td>
-                    <td>COA</td>
-                    <td>DLD</td>
-                    <td>MATH</td>
-                </tr>
-                <tr>
-                    <td>Class</td>
-                    <td>III C</td>
-                    <td>III A</td>
-                    <td>V A</td>
-                    <td>VII C</td>
-                    <td>VII A</td>
-                </tr>
-            </table>
         </div>
     </div>
 </body>

@@ -32,6 +32,14 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  displaypicture:{
+    type: String,
+    required: true,
+  },
+  location:{
+    type: String,
+    required: true,
+  }
 });
 
 const registerStudent = new mongoose.model("Register Student", studentSchema);

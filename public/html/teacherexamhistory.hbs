@@ -20,13 +20,12 @@
         </div>
 
         {{#each records}}
-        <a href="/teacher/qpaper?file={{name}}">
+        <a href="/teacher/studentlist?id={{id}}">
             <div class="examContainer">
 
                 <div class="examName"><img src="/assets/datastructures.png" alt=""> {{subject}}
                 </div>
                 <div class="right">
-                    <div style="color: red;" class="examStart">Evaluated: {{evaluated}}</div>
                     <div class="examDuration">Exam Date: {{date}}</div>
                 </div>
             </div>

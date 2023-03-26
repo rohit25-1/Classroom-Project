@@ -44,13 +44,13 @@ input {
   width: 50%;
 }
 
-hr{
+hr {
   margin-bottom: 30px;
   box-shadow: 0px 0px 100px 1px white;
 }
 .container {
   position: relative;
-  top:100px;
+  top: 100px;
   width: 48rem;
   margin: auto;
   background-color: #0d1117;
@@ -72,10 +72,9 @@ hr{
   animation: blink 2.5s linear infinite;
 }
 
-.password{
+.password {
   animation: none;
 }
-
 
 h1 {
   font-size: 40px;
@@ -100,7 +99,6 @@ h1 {
   }
 }
 
-
 button {
   text-align: center;
   width: 30%;
@@ -110,4 +108,45 @@ button {
   background-color: rgb(117, 203, 246);
   margin: 30px 0px 10px 0px;
   border-radius: 4px;
+}
+
+.passwordCheck {
+  float: right;
+  margin-right: 19px;
+  margin: 3px 19px 3px 0px;
+  font-size: small;
+  display: none;
+  color: rgb(194, 54, 54);
+}
+
+.passwordContainer {
+  width: max-content;
+}
+
+.disabledbutton {
+  pointer-events: none;
+}
+
+.uploadButton {
+  display: block;
+  width: 200px;
+  height: 40px;
+  background-color: #01f080ea;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.uploadButton:hover {
+  transform: scale(1.02);
+  transition: transform 300ms;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
 }

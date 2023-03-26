@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Code</title>
+    <link rel="shortcut icon" href="/assets/student-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/studentlist.css">
+</head>
+
+<body>
+    {{>teacherheader}}
+    <div class="container">
+        <div class="heading flex align">
+            <h1>Subject: {{subject}}</h1>
+            <h4>Date: {{date}}</h4>
+        </div>
+
+        <div class="student-records flex">
+            {{#each records}}
+            <a
+                href="{{#if (eq submitted 'NO')}}/teacher/exam-history{{else}}/teacher/studentapaper?file={{name}}{{/if}}">
+                <div class="studentcontainer">
+                    <div class="circle-image profileimg"
+                        style="background-image: url('/assets/ProfilePictures/{{displaypicture}}');"></div>
+                    <h3>{{studentname}}</h3>
+                    <p>Submitted: {{submitted}}</p>
+                    <p>Evaluated: {{evaluated}}</p>
+                    <p>Marks: {{marks}}</p>
+                </div>
+            </a>
+            {{/each}}
+        </div>
+
+    </div>
+
+</body>
+
+</html>

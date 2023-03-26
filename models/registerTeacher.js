@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const teacherSchema = new mongoose.Schema({
   tid: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
   },
@@ -25,6 +25,14 @@ const teacherSchema = new mongoose.Schema({
     required: true,
   },
   password: {
+    type: String,
+    required: true,
+  },
+  displaypicture: {
+    type: String,
+    required: true,
+  },
+  location: {
     type: String,
     required: true,
   },

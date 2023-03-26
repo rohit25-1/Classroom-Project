@@ -1,141 +1,107 @@
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Account</title>
-    <link rel="stylesheet" href="/css/createstudentaccount.css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account</title>
+  <link rel="stylesheet" href="/css/createstudentaccount.css" />
 
-    <script src="/js/createstudentaccount.js"></script>
-  </head>
+  <script src="/js/createstudentaccount.js"></script>
+</head>
 
-  <body>
-    <div class="container">
-      <h1>Create Account (Student)</h1>
-      <h4 style="color:red; font-size:large">{{error}}</h4>
-      <hr />
-      <form action="/student-register" method="post">
-        <div class="inputbox">
-          <div class="namebox">
-            <p class="namebox inline">USN</p>
-            <p class="loginerror inline">Enter Valid USN</p>
-          </div>
-          <div class="input">
-            <input
-              type="text"
-              name="usn"
-              id="usn"
-              placeholder="Enter USN"
-              onfocusout="validateUSN()"
-              onclick="hideUSN()"
-              required
-            />
+<body>
+  <div class="container">
+    <h1>Create Account (Student)</h1>
+    <h4 style="color:red; font-size:large">{{error}}</h4>
+    <hr />
+    <form action="/student-register" method="post" enctype="multipart/form-data">
+      <div class="inputbox">
+        <div class="namebox">
+          <p class="namebox inline">USN</p>
+          <p class="loginerror inline">Enter Valid USN</p>
+        </div>
+        <div class="input">
+          <input type="text" name="usn" id="usn" placeholder="Enter USN" onfocusout="validateUSN()" onclick="hideUSN()"
+            required />
+        </div>
+      </div>
+      <div class="inputbox">
+        <div class="namebox inline">
+          <p class="namebox">Name</p>
+        </div>
+        <div class="input">
+          <input type="text" name="name" id="name" placeholder="Enter Name" />
+        </div>
+      </div>
+      <div class="inputbox">
+        <div class="namebox">
+          <p class="namebox inline">Phone Number</p>
+          <p class="loginerror inline phone">Enter Valid Phone Number</p>
+        </div>
+        <div class="input">
+          <input type="text" name="phno" id="phoneno" placeholder="Enter Phone Number" onfocusout="validatePhone()"
+            onclick="hidePhone()" required />
+        </div>
+      </div>
+      <div class="inputbox">
+        <div class="namebox">
+          <p class="namebox inline">Email</p>
+          <p class="loginerror inline email">Enter Valid Email</p>
+        </div>
+        <div class="input">
+          <input type="email" name="email" id="email" placeholder="Enter Email" onfocusout="validateEmail()"
+            onclick="hideEmail()" required />
+        </div>
+      </div>
+      <div class="inputbox">
+        <div class="namebox inline">
+          <p class="namebox">Department</p>
+        </div>
+        <div class="input">
+          <input type="text" name="dept" id="dept" placeholder="Enter Department" required />
+        </div>
+      </div>
+      <div class="inputbox">
+        <div class="namebox inline">
+          <p class="namebox">Semester</p>
+        </div>
+        <div class="input">
+          <input type="text" name="semester" id="section" placeholder="Enter your semester" required />
+        </div>
+      </div>
+      <div class="inputbox">
+        <div class="namebox">
+          <p class="namebox inline">Password</p>
+          <div class="passwordContainer">
+            <p class="passwordCheck inline up special">Special Characters</p>
+            <p class="passwordCheck inline up upper">Uppercase</p>
+            <p class="passwordCheck inline up number">Numbers</p>
+            <p class="passwordCheck inline up length">Length > 7</p>
           </div>
         </div>
-        <div class="inputbox">
-          <div class="namebox inline">
-            <p class="namebox">Name</p>
-          </div>
-          <div class="input">
-            <input type="text" name="name" id="name" placeholder="Enter Name" />
-          </div>
+        <div class="input">
+          <input type="password" name="password" id="password" placeholder="Enter your password"
+            oninput="validatePassword()" onclick="hidePassword()" onfocusout="validatePassword()" required />
         </div>
-        <div class="inputbox">
-          <div class="namebox">
-            <p class="namebox inline">Phone Number</p>
-            <p class="loginerror inline phone">Enter Valid Phone Number</p>
-          </div>
-          <div class="input">
-            <input
-              type="text"
-              name="phno"
-              id="phoneno"
-              placeholder="Enter Phone Number"
-              onfocusout="validatePhone()"
-              onclick="hidePhone()"
-              required
-            />
-          </div>
-        </div>
-        <div class="inputbox">
-          <div class="namebox">
-            <p class="namebox inline">Email</p>
-            <p class="loginerror inline email">Enter Valid Email</p>
-          </div>
-          <div class="input">
-            <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Enter Email"
-              onfocusout="validateEmail()"
-              onclick="hideEmail()"
-              required
-            />
-          </div>
-        </div>
-        <div class="inputbox">
-          <div class="namebox inline">
-            <p class="namebox">Department</p>
-          </div>
-          <div class="input">
-            <input
-              type="text"
-              name="dept"
-              id="dept"
-              placeholder="Enter Department"
-              required
-            />
-          </div>
-        </div>
-        <div class="inputbox">
-          <div class="namebox inline">
-            <p class="namebox">Semester</p>
-          </div>
-          <div class="input">
-            <input
-              type="text"
-              name="semester"
-              id="section"
-              placeholder="Enter your semester"
-              required
-            />
-          </div>
-        </div>
-        <div class="inputbox">
-          <div class="namebox">
-            <p class="namebox inline">Password</p>
-            <div class="passwordContainer">
-              <p class="passwordCheck inline up special">Special Characters</p>
-              <p class="passwordCheck inline up upper">Uppercase</p>
-              <p class="passwordCheck inline up number">Numbers</p>
-              <p class="passwordCheck inline up length">Length > 7</p>
-            </div>
-          </div>
-          <div class="input">
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Enter your password"
-              oninput="validatePassword()"
-              onclick="hidePassword()"
-              onfocusout="validatePassword()"
-              required
-            />
-          </div>
-        </div>
+      </div>
 
-        <div class="button">
-          <a href="javascript:void(0)"><button
-              class="disabledbutton"
-              type="submit"
-            >Create Account</button></a>
+      <div class="inputbox">
+        <div class="namebox">
+          <p class="namebox inline">Profile Picture</p>
         </div>
-      </form>
+        <div class="input">
+          <input type="file" name="profile-picture" id="" class="upload" hidden required />
+          <input type="button" value="Upload Picture" class="uploadButton" onclick="fileUpload()" />
+        </div>
+      </div>
 
-    </div>
-  </body>
+      <div class="button">
+        <a href="javascript:void(0)"><button class="disabledbutton" type="submit">Create Account</button></a>
+      </div>
+    </form>
+
+  </div>
+</body>
 
 </html>

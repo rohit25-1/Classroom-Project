@@ -144,3 +144,7 @@ function validatePassword() {
     special.style.display = "block";
   }
 }
+function fileUpload() {
+  const clicker = document.querySelector(".upload");
+  clicker.click();
+}

@@ -28,7 +28,12 @@
 
     <div class="pageContents">
         <div class="heading">
-            <h1>{{subject}}</h1>
+            <div class="title flex">
+                <h1>Subject: {{subject}}</h1>
+                <form action="/delete-exam?examcode={{examcode}}" method="post">
+                    <input type="submit" value="Delete Exam">
+                </form>
+            </div>
 
             <div class="questionPaper">
                 <iframe src="/assets/QuestionPapers/{{name}}" width="800" height="900">

@@ -1,3 +1,110 @@
+<style>
+  nav {
+    width: 100%;
+    height: 5rem;
+    background-color: #161b22;
+    backdrop-filter: blur(30px);
+    box-shadow: 0px 0px 30px 2px rgb(47, 53, 67);
+  }
+
+  li {
+    display: inline;
+    list-style: none;
+    margin-right: 30px;
+    /* border: 1px solid red; */
+    font-size: 18px;
+    padding: 10px 23px;
+    border-radius: 10px;
+    position: relative;
+  }
+
+  li:hover {
+    color: rgb(255, 255, 255);
+    transition: color 300ms;
+  }
+
+  a {
+    text-decoration: none;
+    color: rgb(225, 225, 225);
+  }
+
+  li:hover {
+    box-shadow: 0px 0px 20px 2px #45566e;
+  }
+
+  .navElements {
+    width: 90%;
+    position: relative;
+    top: 35%;
+    margin: auto;
+  }
+
+  img {
+    width: 50px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 60px 1px rgb(65, 65, 73);
+  }
+
+  .image {
+    background-color: transparent;
+    padding: 0;
+    position: relative;
+    top: -9px;
+    float: right;
+  }
+
+  .image:hover {
+    box-shadow: none;
+  }
+
+  .dropdown {
+    width: 100px;
+    height: 100px;
+    float: right;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .menuitems {
+    display: none;
+    position: relative;
+    top: -5px;
+    right: 44px;
+    color: white;
+    width: 160px;
+    height: 50px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #28313d66;
+    backdrop-filter: blur(200px);
+  }
+
+  .logout {
+    position: relative;
+    top: 25%;
+  }
+
+  .dropdown:hover .menuitems {
+    display: block;
+    /* transition: display 300ms; */
+  }
+
+  .circle-image-nav {
+    width: 45px;
+    /* adjust this to your desired size */
+    height: 45px;
+    /* adjust this to your desired size */
+    /* background-image: url("your-image-url-here"); */
+    background-size: cover;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: transparent;
+    float: right;
+    box-shadow: 0px 0px 60px 1px rgb(65, 65, 73);
+    margin-right: 20px;
+  }
+</style>
+
 <nav>
   <div class="navElements">
     <ul>
@@ -16,9 +123,15 @@
       </a>
       <a href="#">
         <div class="dropdown">
-          <li class="image"><img src="/assets/teacher.png" alt="" /></li>
-          <div class="menuitems">
-            <a href="/" class="logout">logout</a>
+          <div class="dropdown">
+            <li class="image">
+              <div class="circle-image-nav"
+                style="background-image: url('/assets/ProfilePictures/{{displaypicture}}');">
+              </div>
+            </li>
+            <div class="menuitems">
+              <a href="/logout" class="logout">logout</a>
+            </div>
           </div>
         </div>
       </a>

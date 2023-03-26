@@ -4,7 +4,14 @@ const examSchema = new mongoose.Schema({
   examcode: {
     type: String,
     required: true,
-    unique: true,
+  },
+  name: {
+    type: String,
+    default: "",
+  },
+  location: {
+    type: String,
+    default: "",
   },
   usn: {
     type: String,
@@ -31,9 +38,24 @@ const examSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  submitted: {
+    type: String,
+    default: "NO",
+  },
   evaluated: {
     type: String,
     default: "NO",
+  },
+  studentname: {
+    type: String,
+  },
+  displaypicture: {
+    type: String,
+    required: true,
+  },
+  marks: {
+    type: String,
+    default: "N/A",
   },
 });
 
