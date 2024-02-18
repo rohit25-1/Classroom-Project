@@ -15,11 +15,6 @@ function hideUSN() {
   changeStyle.style.display = "none";
 }
 
-// function hidePassword() {
-//   let changeStyle = document.querySelector(".passwordContainer");
-//   changeStyle.style.display = "none";
-// }
-
 function validatePhone() {
   let phoneNo = document.querySelector("#phoneno").value;
   let pattern = /\d{10}/;

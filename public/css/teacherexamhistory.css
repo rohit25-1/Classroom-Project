@@ -79,6 +79,7 @@ img {
 img {
   position: relative;
   top: 10px;
+  margin-right: 10px;
 }
 
 .examContainer:hover {

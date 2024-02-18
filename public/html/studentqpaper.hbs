@@ -1,53 +1,46 @@
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Data Structures With C</title>
-    <link rel="stylesheet" href="/css/studentqpaper.css" />
-    <script
-      src="https://kit.fontawesome.com/52a1890fd9.js"
-      crossorigin="anonymous"
-    ></script>
-    <script src="/js/studentqpaper.js"></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Structures With C</title>
+  <link rel="stylesheet" href="/css/studentqpaper.css" />
+  <script src="https://kit.fontawesome.com/52a1890fd9.js" crossorigin="anonymous"></script>
+  <script src="/js/studentqpaper.js"></script>
+</head>
 
 
-  <body>
-    {{>studentheader}}
+<body>
+  {{>studentheader}}
 
-    <div class="pageContents">
-      <div class="heading">
-        <h1>{{subject}}</h1>
+  <div class="pageContents">
+    <div class="heading">
+      <h1>{{subject}}</h1>
+      <a>
+        <div class="uploadPDF" id="buttonid" onclick="fileUpload()">
+          <i class="fa-solid fa-plus"></i>
+          <p>Upload PDF</p>
+        </div>
+      </a>
+      <form method="post" action="/upload-answersheet?id={{id}}" enctype="multipart/form-data">
+        <input type="file" name="answer-sheet" id="pdf" hidden class="hidden-file" />
         <a>
-          <div class="uploadPDF" id="buttonid" onclick="fileUpload()">
-            <i class="fa-solid fa-plus"></i>
-            <p>Upload PDF</p>
+          <div class="uploadPDF submit" onclick="submitForm()">
+            <i class="fa-solid fa-tick"></i>
+            <p>Submit</p>
           </div>
         </a>
-        <form method="post" action="/upload-answersheet?id={{id}}" enctype="multipart/form-data">
-          <input type="file" name="answer-sheet" id="pdf" hidden class="hidden-file" />
-          <a>
-            <div class="uploadPDF submit" onclick="submitForm()">
-              <i class="fa-solid fa-tick"></i>
-              <p>Submit</p>
-            </div>
-          </a>
-          <button type="submit" hidden class="hidden-submit"></button>
-        </form>
-      </div>
-
-      <div class="questionPaper">
-        <iframe
-          src="/assets/QuestionPapers/{{name}}"
-          width="800"
-          height="900"
-        >
-        </iframe>
-      </div>
+        <button type="submit" hidden class="hidden-submit"></button>
+      </form>
     </div>
 
-  </body>
+    <div class="questionPaper">
+      <iframe src="{{name}}" width="800" height="900">
+      </iframe>
+    </div>
+  </div>
+
+</body>
 
 </html>

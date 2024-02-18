@@ -1,10 +1,16 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost:27017/classroom", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(()=>{
+mongoose
+  .connect(
+    "mongodb+srv://rohit:4hsmDh1vWUltBN1g@cluster0.tnmk723.mongodb.net/",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => {
     console.log("Connection Successful");
-}).catch((e)=>{
+  })
+  .catch((e) => {
     console.log(`Error: ${e}`);
-})
+  });

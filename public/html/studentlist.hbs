@@ -23,8 +23,7 @@
             <a
                 href="{{#if (eq submitted 'NO')}}/teacher/exam-history{{else}}/teacher/studentapaper?file={{name}}{{/if}}">
                 <div class="studentcontainer">
-                    <div class="circle-image profileimg"
-                        style="background-image: url('/assets/ProfilePictures/{{displaypicture}}');"></div>
+                    <div class="circle-image profileimg" style="background-image: url({{displaypicture}});"></div>
                     <h3>{{studentname}}</h3>
                     <p>Submitted: {{submitted}}</p>
                     <p>Evaluated: {{evaluated}}</p>
