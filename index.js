@@ -55,8 +55,8 @@ const partialsPath = path.join(__dirname, "./public/partials/");
 app.use(express.static(__dirname + "/public/"));
 
 // app.use(express.static("public"));
-// app.use(express.static("public/css"));
-// app.use(express.static("public/js"));
+app.use(express.static(__dirname + "public/css"));
+app.use(express.static(__dirname + "public/js"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 hbs.registerPartials(partialsPath);
