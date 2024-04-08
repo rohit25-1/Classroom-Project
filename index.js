@@ -52,9 +52,11 @@ const viewsPath = path.join(__dirname, "./public/html/");
 const partialsPath = path.join(__dirname, "./public/partials/");
 
 //Setting Static Folders
-app.use(express.static("public"));
-app.use(express.static("public/css"));
-app.use(express.static("public/js"));
+app.use(express.static(__dirname + "/public/"));
+
+// app.use(express.static("public"));
+// app.use(express.static("public/css"));
+// app.use(express.static("public/js"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 hbs.registerPartials(partialsPath);
