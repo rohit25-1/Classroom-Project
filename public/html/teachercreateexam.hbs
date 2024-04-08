@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Exam</title>
-    <link rel="stylesheet" href="/teachercreateexam.css">
+    <link rel="stylesheet" href="/css/teachercreateexam.css">
     <link rel="stylesheet" href="https://kit.fontawesome.com/52a1890fd9.css" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/52a1890fd9.js" crossorigin="anonymous"></script>
     <link rel="shortcut icon" href="/assets/teacher-logo.png" type="image/x-icon">
@@ -27,8 +27,8 @@
         </div>
         <ul>
             {{#each records}}
-                <a href="/teacher/qpaper?file={{name}}">
-                    <div class="examContainer">
+            <a href="/teacher/qpaper?file={{name}}">
+                <div class="examContainer">
 
                     <div class="examName"><img src="/assets/datastructures.png" alt=""> {{subject}}
                     </div>
@@ -37,11 +37,11 @@
                         <div class="examStart">Exam Start: {{time}}</div>
                         <div class="examDuration">Exam Date: {{date}}</div>
                     </div>
-                    </div>
-                </a>
+                </div>
+            </a>
             {{/each}}
         </ul>
-        
+
 
     </div>
 
