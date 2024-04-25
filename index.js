@@ -283,6 +283,12 @@ app.post(
           error: "Email Already Registered",
         });
       }
+      console.log(
+        "Keys: " +
+          process.env.ACCESS_KEY +
+          " secretAccessKey " +
+          process.env.SECRET_ACCESS
+      );
       console.log(error);
     }
   }
