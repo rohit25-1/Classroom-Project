@@ -11,17 +11,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1560.0",
-    "express": "^4.18.2",
+    "@aws-sdk/client-s3": "^3.617.0",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
     "express-session": "^1.17.3",
     "hbs": "^4.2.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.0.0",
     "multer": "^1.4.5-lts.1",
-    "multer-google-storage": "^1.3.0",
-    "multer-s3": "^2.10.0"
+    "name2mime": "^1.0.1",
+    "redis": "^4.6.15"
   },
   "devDependencies": {
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.4.5",
     "nodemon": "^2.0.20"
   }
 }

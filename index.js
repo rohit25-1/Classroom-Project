@@ -4,44 +4,58 @@ const app = express();
 const bodyParser = require("body-parser");
 const path = require("path");
 const hbs = require("hbs");
-const session = require("express-session");
-const aws = require("aws-sdk");
 const multer = require("multer");
-const multerS3 = require("multer-s3");
+const redis = require("redis");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 
-aws.config.update({
-  accessKeyId: process.env.ACCESS_KEY,
-  secretAccessKey: process.env.SECRET_ACCESS,
-  region: "ap-southeast-2",
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+require("dotenv").config();
+app.use(express.json());
+
+const s3 = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
 });
 
-const s3 = new aws.S3();
+const storage = multer.memoryStorage();
 const upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: "rohit-classroom",
-    key: function (req, file, cb) {
-      cb(null, Date.now().toString() + "-" + file.originalname);
-    },
-    contentType: multerS3.AUTO_CONTENT_TYPE,
-    contentDisposition: "inline",
-  }),
+  storage: storage,
 });
+
+const uploadFile = async (file) => {
+  console.log(file.mimetype);
+  const key = Date.now().toString() + "-" + file.originalname;
+  const command = new PutObjectCommand({
+    Bucket: process.env.S3_BUCKET,
+    Key: key,
+    Body: file.buffer,
+    ContentDisposition: "inline",
+    ContentType: file.mimetype,
+  });
+
+  try {
+    const ans = await s3.send(command);
+    console.log(ans);
+    const url = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+    return url;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+app.use(cookieParser());
+const SECRET_KEY = process.env.SECRET_KEY;
 
 hbs.registerHelper("eq", function (a, b) {
   return a === b;
 });
-
-app.use(
-  session({
-    secret: "my-secret-key",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+const redisClient = redis.createClient();
 
 require("./db/connect");
-const { qpUpload, ppUpload, apUpload } = require("./storage/storage");
 
 //Database and Partials Linking
 const registerStudent = require("./models/registerStudent");
@@ -64,76 +78,133 @@ hbs.registerPartials(partialsPath);
 app.set("view engine", "hbs"); //setting views engine to hbs
 app.set("views", viewsPath); //changing views directory
 
-function requireAuth(req, res, next) {
-  if (!req.session.isAuthenticated) {
-    return res.redirect("/");
+const authenticateStudentToken = async (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.redirect("/student");
   }
-  next();
-}
+  const user = jwt.verify(token, SECRET_KEY);
+  // console.log(user);
+  const findinDB = await registerStudent.findOne({ usn: user.usn });
+  if (findinDB) {
+    req.user = user;
+    next();
+  } else res.redirect("/");
+};
+
+const authenticateTeacherToken = async (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.redirect("/teacher");
+  }
+  const user = jwt.verify(token, SECRET_KEY);
+  // console.log(user);
+  const findinDB = await registerTeacher.findOne({ tid: user.tid });
+  if (findinDB) {
+    req.user = user;
+    next();
+  } else res.redirect("/");
+};
+
+const authenticateHomeToken = async (req, res, next) => {
+  const token = req.cookies.token;
+  if (token == undefined) {
+    next();
+  } else {
+    const user = jwt.verify(token, SECRET_KEY);
+    if (user.tid) {
+      console.log("reached");
+      const findinDB = await registerTeacher.findOne({ tid: user.tid });
+
+      if (findinDB) {
+        res.redirect("/teacher/home");
+      } else {
+        next();
+      }
+    } else if (user.usn) {
+      console.log("reached Student");
+
+      const findinDBStud = await registerStudent.findOne({ usn: user.usn });
+      console.log(findinDBStud);
+      if (findinDBStud) {
+        res.redirect("/student/home");
+      } else next();
+    }
+  }
+};
+
+app.post("/upload", upload.single("file"), async (req, res) => {
+  const file = req.file;
+  if (!file) {
+    return res.status(400).send("No file uploaded.");
+  }
+
+  try {
+    console.log(req.file);
+    // console.log(req.file.location);
+    const a = await uploadFile(req.file);
+    console.log(a);
+    res.send("File uploaded successfully.");
+  } catch (error) {
+    res.status(500).send("File upload failed.");
+  }
+});
 
 //Default Page
-app.get("/", (req, res) => {
+app.get("/", authenticateHomeToken, (req, res) => {
   res.render("index");
 });
 
 //Student Starts Here
 //Login
-app.get("/student", (req, res) => {
+app.get("/student", authenticateHomeToken, (req, res) => {
   res.render("studentlogin");
 });
 
 //Exam Code
-app.get("/student/examcode", (req, res) => {
-  if (req.session.isLoggedIn) {
-    res.render("studentexamcode", {
-      name: req.session.name,
-      displaypicture: req.session.displaypicture,
-    });
-  } else {
-    res.redirect("/student");
-  }
+app.get("/student/examcode", authenticateStudentToken, (req, res) => {
+  res.render("studentexamcode", {
+    name: req.user.name,
+    displaypicture: req.user.displaypicture,
+  });
 });
 
 //Create Account
-app.get("/student/create-account", (req, res) => {
+app.get("/student/create-account", authenticateHomeToken, (req, res) => {
   res.render("createstudentaccount");
 });
 
 //Exam Hall
-app.get("/student/exam-hall", async (req, res) => {
+app.get("/student/exam-hall", authenticateStudentToken, async (req, res) => {
   let currentDate = new Date();
   const offset = +270;
   checkDate = new Date(currentDate.getTime() + offset * 60 * 1000);
   startDate = new Date(currentDate.getTime() + 330 * 60 * 1000);
-  if (req.session.isLoggedIn) {
-    // console.log("reached");
-    const records = await studentExam.find({
-      usn: req.session.usn,
-      parsedDate: { $gte: checkDate },
-      submitted: "NO",
-    });
-    records.forEach((record) => {
-      if (!(record.parsedDate <= startDate)) {
-        record.name = "exam-hall/#";
-      } else {
-        record.name = "qpaper?file=" + record.name;
-      }
-    });
-    res.render("studentexamhall", {
-      records,
-      displaypicture: req.session.displaypicture,
-    });
-  } else {
-    res.redirect("/student");
-  }
+
+  const records = await studentExam.find({
+    usn: req.user.usn,
+    parsedDate: { $gte: checkDate },
+    submitted: "NO",
+  });
+  records.forEach((record) => {
+    if (!(record.parsedDate <= startDate)) {
+      record.name = "exam-hall/#";
+    } else {
+      record.name = "qpaper?file=" + record.name;
+    }
+  });
+  res.render("studentexamhall", {
+    records,
+    displaypicture: req.user.displaypicture,
+  });
 });
 //$lt
 //Import Exam by Code
-app.post("/search-code", async (req, res) => {
+app.post("/search-code", authenticateStudentToken, async (req, res) => {
   const examcode = req.body.examcode;
   const verifyCode = await studentExam.findOne({
     examcode: examcode,
-    usn: req.session.usn,
+    usn: req.user.usn,
   });
   if (verifyCode != null) {
     res.render("studentexamcode", { error: "Exam Code Already Added" });
@@ -147,20 +218,21 @@ app.post("/search-code", async (req, res) => {
     } else {
       try {
         const updateCode = new studentExam({
-          usn: req.session.usn,
+          usn: req.user.usn,
           examcode: authenticate.examcode,
           subject: authenticate.subject,
           date: authenticate.date,
           time: authenticate.time,
           name: authenticate.name,
           parsedDate: authenticate.parsedDate,
-          displaypicture: req.session.displaypicture,
-          studentname: req.session.name,
+          displaypicture: req.user.displaypicture,
+          studentname: req.user.name,
           location: authenticate.location,
         });
         // console.log(updateCode);
         const registered = await updateCode.save();
-        res.status(201).redirect("/student/exam-hall");
+        if (registered) res.status(201).redirect("/student/exam-hall");
+        else res.send("{'message':'Couldnt Update Code'}");
       } catch (error) {
         console.log(error);
       }
@@ -169,24 +241,21 @@ app.post("/search-code", async (req, res) => {
 });
 
 //Exam History
-app.get("/student/exam-history", async (req, res) => {
+app.get("/student/exam-history", authenticateStudentToken, async (req, res) => {
   let currentDate = new Date();
   const offset = +270;
   currentDate = new Date(currentDate.getTime() + offset * 60 * 1000);
-  if (req.session.isLoggedIn) {
-    const records = await studentExam.find({
-      usn: req.session.usn,
-      $or: [{ parsedDate: { $lt: currentDate } }, { submitted: "YES" }],
-    });
-    console.log(records);
-    // console.log(records);
-    res.render("studentexamhistory", {
-      records,
-      displaypicture: req.session.displaypicture,
-    });
-  } else {
-    res.redirect("/student");
-  }
+
+  const records = await studentExam.find({
+    usn: req.user.usn,
+    $or: [{ parsedDate: { $lt: currentDate } }, { submitted: "YES" }],
+  });
+  // console.log(records);
+  // console.log(records);
+  res.render("studentexamhistory", {
+    records,
+    displaypicture: req.user.displaypicture,
+  });
 });
 
 //Forgot Password
@@ -195,56 +264,44 @@ app.get("/student/forgotpassword", (req, res) => {
 });
 
 //Homescreen
-app.get("/student/home", (req, res) => {
-  if (req.session.isLoggedIn) {
-    console.log(req.session);
-    res.render("studenthome", {
-      name: req.session.name,
-      displaypicture: req.session.displaypicture,
-    });
-  } else {
-    res.redirect("/student");
-  }
+app.get("/student/home", authenticateStudentToken, (req, res) => {
+  // console.log(req.user);
+  res.render("studenthome", {
+    name: req.session,
+    displaypicture: req.user.displaypicture,
+  });
 });
 
 //Student Profile
-app.get("/student/profile", (req, res) => {
-  if (req.session.isLoggedIn) {
-    const name = req.session.name;
-    const dept = req.session.dept;
-    const semester = req.session.semester;
-    const usn = req.session.usn;
-    if (name && dept && semester && usn) {
-      res.render("studentprofile", {
-        usn,
-        name,
-        semester,
-        dept,
-        displaypicture: req.session.displaypicture,
-      });
-    }
-  } else {
-    res.redirect("/student");
+app.get("/student/profile", authenticateStudentToken, (req, res) => {
+  const name = req.user.name;
+  const dept = req.user.dept;
+  const semester = req.user.semester;
+  const usn = req.user.usn;
+  if (name && dept && semester && usn) {
+    res.render("studentprofile", {
+      usn,
+      name,
+      semester,
+      dept,
+      displaypicture: req.user.displaypicture,
+    });
   }
 });
 
 //Question Paper -> Yet to finish
-app.get("/student/qpaper", async (req, res) => {
-  if (req.session.isLoggedIn) {
-    req.session.file = req.query.file;
-    const records = await studentExam.findOne({
-      name: req.query.file,
-    });
-    // console.log(records);
-    res.render("studentqpaper", {
-      name: records.location,
-      subject: records.subject,
-      displaypicture: req.session.displaypicture,
-      id: records._id,
-    });
-  } else {
-    res.redirect("/student");
-  }
+app.get("/student/qpaper", authenticateStudentToken, async (req, res) => {
+  req.file = req.query.file;
+  const records = await studentExam.findOne({
+    name: req.query.file,
+  });
+  // console.log(records);
+  res.render("studentqpaper", {
+    name: records.location,
+    subject: records.subject,
+    displaypicture: req.user.displaypicture,
+    id: records._id,
+  });
 });
 
 //Registering Student
@@ -253,6 +310,7 @@ app.post(
   upload.single("profile-picture"),
   async (req, res) => {
     try {
+      location = await uploadFile(req.file);
       const register = new registerStudent({
         usn: req.body.usn,
         name: req.body.name,
@@ -262,9 +320,8 @@ app.post(
         semester: req.body.semester,
         password: req.body.password,
         displaypicture: req.file.originalname,
-        location: req.file.location,
+        location,
       });
-      // console.log(register);
       const registered = await register.save();
       res.status(201).render("studentlogin", {
         status: "Successfully Registered",
@@ -282,14 +339,9 @@ app.post(
         res.render("createstudentaccount", {
           error: "Email Already Registered",
         });
+      } else {
+        console.log(error);
       }
-      console.log(
-        "Keys: " +
-          process.env.ACCESS_KEY +
-          " secretAccessKey " +
-          process.env.SECRET_ACCESS
-      );
-      console.log(error);
     }
   }
 );
@@ -308,13 +360,21 @@ app.post("/student-login", async (req, res) => {
         error: "USN Doesn't Exist",
       });
     } else if (authenticate.password === password) {
-      req.session.isLoggedIn = true;
-      req.session.name = authenticate.name;
-      req.session.usn = authenticate.usn;
-      req.session.semester = authenticate.semester;
-      req.session.dept = authenticate.dept;
-      req.session.displaypicture = authenticate.location;
-      console.log(req.session);
+      const token = jwt.sign(
+        {
+          name: authenticate.name,
+          usn: authenticate.usn,
+          semester: authenticate.semester,
+          dept: authenticate.dept,
+          displaypicture: authenticate.location,
+        },
+        SECRET_KEY,
+        {
+          expiresIn: "1h",
+        }
+      );
+      res.cookie("token", token, { httpOnly: true });
+
       res.redirect("/student/home");
     } else {
       res.status(400).render("studentlogin", {
@@ -330,7 +390,7 @@ app.post("/student-login", async (req, res) => {
 });
 
 //Resetting Password Of Student
-app.post("/student/reset-password", async (req, res) => {
+app.post("/student/reset-password", authenticateHomeToken, async (req, res) => {
   try {
     const update = await registerStudent.updateOne(
       {
@@ -356,7 +416,7 @@ app.post("/student/reset-password", async (req, res) => {
     });
   }
 });
-app.post("/teacher/reset-password", async (req, res) => {
+app.post("/teacher/reset-password", authenticateHomeToken, async (req, res) => {
   try {
     const update = await registerTeacher.updateOne(
       {
@@ -385,115 +445,92 @@ app.post("/teacher/reset-password", async (req, res) => {
 
 //Teacher Starts Here
 
-app.get("/teacher", (req, res) => {
+app.get("/teacher", authenticateHomeToken, (req, res) => {
   res.render("teacherlogin");
 });
 
-app.get("/teacher/examcode", (req, res) => {
-  if (req.session.isLoggedIn) {
-    res.render("teachercreatecode", { name: req.session.name });
-  } else {
-    res.redirect("/teacher");
-  }
+app.get("/teacher/examcode", authenticateTeacherToken, (req, res) => {
+  res.render("teachercreatecode", { name: req.user.name });
 });
 
-app.get("/teacher/create-account", (req, res) => {
+app.get("/teacher/create-account", authenticateHomeToken, (req, res) => {
   res.render("createteacheraccount");
 });
 
-app.get("/teacher/create-exam", async (req, res) => {
+app.get("/teacher/create-exam", authenticateTeacherToken, async (req, res) => {
   try {
     let currentDate = new Date();
     const offset = +330;
     currentDate = new Date(currentDate.getTime() + offset * 60 * 1000);
-    if (req.session.isLoggedIn) {
-      const records = await exam.find({
-        tid: req.session.tid,
-        parsedDate: { $gte: currentDate },
-      });
-      console.log(records);
-      res.render("teachercreateexam", {
-        records,
-        displaypicture: req.session.displaypicture,
-      });
-    } else {
-      res.redirect("/teacher");
-    }
+
+    const records = await exam.find({
+      tid: req.user.tid,
+      parsedDate: { $gte: currentDate },
+    });
+    // console.log(records);
+    res.render("teachercreateexam", {
+      records,
+      displaypicture: req.user.displaypicture,
+    });
   } catch (error) {
     console.log(error);
   }
 });
-app.get("/teacher/exam-history", async (req, res) => {
+app.get("/teacher/exam-history", authenticateTeacherToken, async (req, res) => {
   let currentDate = new Date();
   const offset = +330;
   currentDate = new Date(currentDate.getTime() + offset * 60 * 1000);
-  if (req.session.isLoggedIn) {
-    const records = await exam.find({
-      tid: req.session.tid,
-      parsedDate: { $lt: currentDate },
-    });
-    // console.log(records);
-    res.render("teacherexamhistory", {
-      records,
-      displaypicture: req.session.displaypicture,
-      error: req.query.error,
-    });
-  } else {
-    res.redirect("/teacher");
-  }
+
+  const records = await exam.find({
+    tid: req.user.tid,
+    parsedDate: { $lt: currentDate },
+  });
+  // console.log(records);
+  res.render("teacherexamhistory", {
+    records,
+    displaypicture: req.user.displaypicture,
+    error: req.query.error,
+  });
 });
 app.get("/teacher/forgotpassword", (req, res) => {
   res.render("teacherforgotpassword");
 });
-app.get("/teacher/home", (req, res) => {
-  const username = req.session.name;
-  if (username) {
-    res.render("teacherhome", {
-      name: req.session.name,
-      displaypicture: req.session.displaypicture,
-    });
-  } else {
-    res.redirect("/teacher");
-  }
+app.get("/teacher/home", authenticateTeacherToken, (req, res) => {
+  res.render("teacherhome", {
+    name: req.user.name,
+    displaypicture: req.user.displaypicture,
+  });
 });
 
 //Teacher Profile
-app.get("/teacher/profile", (req, res) => {
-  if (req.session.isLoggedIn) {
-    const name = req.session.name;
-    const dept = req.session.dept;
-    const phone = req.session.phone;
-    const tid = req.session.tid;
-    if (name && dept && phone && tid) {
-      res.render("teacherprofile", {
-        tid,
-        name,
-        phone,
-        dept,
-        displaypicture: req.session.displaypicture,
-      });
-    }
-  } else {
-    res.redirect("/teacher");
+app.get("/teacher/profile", authenticateTeacherToken, (req, res) => {
+  const name = req.user.name;
+  const dept = req.user.dept;
+  const phone = req.user.phone;
+  const tid = req.user.tid;
+  if (name && dept && phone && tid) {
+    res.render("teacherprofile", {
+      tid,
+      name,
+      phone,
+      dept,
+      displaypicture: req.user.displaypicture,
+    });
   }
 });
 
 //Teacher Access to Question Papers
-app.get("/teacher/qpaper", async (req, res) => {
-  if (req.session.isLoggedIn) {
-    const records = await exam.findOne({
-      name: req.query.file,
-    });
-    // console.log(records);
-    res.render("teacherqpaper", {
-      name: records.location,
-      subject: records.subject,
-      examcode: records.examcode,
-      displaypicture: req.session.displaypicture,
-    });
-  } else {
-    res.redirect("/teacher");
-  }
+app.get("/teacher/qpaper", authenticateTeacherToken, async (req, res) => {
+  const records = await exam.findOne({
+    name: req.query.file,
+  });
+  // console.log(records);
+  res.render("teacherqpaper", {
+    name: records.location,
+    subject: records.subject,
+    examcode: records.examcode,
+    displaypicture: req.user.displaypicture,
+  });
 });
 
 //Registration page of teacher
@@ -502,7 +539,6 @@ app.post(
   upload.single("profile-picture"),
   async (req, res) => {
     try {
-      console.log(req.file);
       const register = new registerTeacher({
         tid: req.body.usn,
         name: req.body.name,
@@ -511,7 +547,7 @@ app.post(
         dept: req.body.dept,
         password: req.body.password,
         displaypicture: req.file.originalname,
-        location: req.file.location,
+        location: await uploadFile(req.file),
       });
       // console.log(register);
       const registered = await register.save();
@@ -543,18 +579,24 @@ app.post("/teacher-login", async (req, res) => {
     const authenticate = await registerTeacher.findOne({
       tid: tid,
     });
-    // console.log(password);
     if (authenticate == null) {
       res.status(400).render("teacherlogin", {
         error: "TID Doesn't Exist",
       });
     } else if (authenticate.password === password) {
-      req.session.isLoggedIn = true;
-      req.session.name = authenticate.name;
-      req.session.tid = authenticate.tid;
-      req.session.phone = authenticate.phonenumber;
-      req.session.dept = authenticate.dept;
-      req.session.displaypicture = authenticate.location;
+      const token = jwt.sign(
+        {
+          name: authenticate.name,
+          tid: authenticate.tid,
+          phone: authenticate.phonenumber,
+          dept: authenticate.dept,
+          displaypicture: authenticate.location,
+        },
+        SECRET_KEY,
+        { expiresIn: "1h" }
+      );
+      res.cookie("token", token, { httpOnly: true });
+
       res.redirect("/teacher/home");
     } else {
       res.status(400).render("teacherlogin", {
@@ -563,70 +605,78 @@ app.post("/teacher-login", async (req, res) => {
     }
   } catch (error) {
     res.status(400).render("teacherlogin", {
-      status: "Wrong Email or Password",
+      error: "Wrong Email or Password",
     });
     console.log(error);
   }
 });
 
-app.post("/register-exam", upload.single("questionp"), async (req, res) => {
-  try {
-    const htmlDate = req.body.date;
-    const htmlTime = req.body.time;
-    const dateTimeString = htmlDate + "T" + htmlTime + ":00.000Z";
-    const getDate = new Date(dateTimeString);
-    // console.log(dateTimeString);
-    console.log(req.file);
-    // console.log(getDate);
-    const registerExam = new exam({
-      tid: req.session.tid,
-      examcode: req.body.examcode,
-      semester: req.body.semester,
-      subject: req.body.subject,
-      date: req.body.date,
-      time: req.body.time,
-      name: req.file.originalname,
-      location: req.file.location,
-      parsedDate: getDate,
-    });
-    // console.log(req.file);
-    // console.log(registerExam);
-    const registered = await registerExam.save();
-    res.status(201).redirect("/teacher/create-exam");
-  } catch (error) {
-    console.log(error);
+app.post(
+  "/register-exam",
+  upload.single("questionp"),
+  authenticateTeacherToken,
+  async (req, res) => {
+    try {
+      const htmlDate = req.body.date;
+      const htmlTime = req.body.time;
+      const dateTimeString = htmlDate + "T" + htmlTime + ":00.000Z";
+      const getDate = new Date(dateTimeString);
+      // console.log(dateTimeString);
+      // console.log(req.file);
+      // console.log(getDate);
+      const registerExam = new exam({
+        tid: req.user.tid,
+        examcode: req.body.examcode,
+        semester: req.body.semester,
+        subject: req.body.subject,
+        date: req.body.date,
+        time: req.body.time,
+        name: Date.now() + req.file.originalname,
+        location: await uploadFile(req.file),
+        parsedDate: getDate,
+      });
+      // console.log(req.file);
+      // console.log(registerExam);
+      const registered = await registerExam.save();
+      res.status(201).redirect("/teacher/create-exam");
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 app.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error("Error destroying session", err);
-    } else {
-      res.redirect("/");
-    }
-  });
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.redirect("/");
+  }
+
+  // redisClient.set(token, "blacklisted", "EX", 3600); // Blacklist for 1 hour
+  res.clearCookie("token"); // Clear the cookie
+  res.redirect("/"); // No Content
 });
 
 app.post(
   "/upload-answersheet",
+  authenticateStudentToken,
   upload.single("answer-sheet"),
   async (req, res) => {
     try {
-      console.log(req.session.file);
+      // console.log(req.file);
       const registerExam = await studentExam.updateOne(
         {
           _id: req.query.id,
         },
         {
           name: req.file.originalname,
-          location: req.file.location,
+          location: await uploadFile(req.file),
           submitted: "YES",
         }
       );
       // console.log(registerExam);
       // console.log(req.file);
-      console.log(registerExam);
+      // console.log(registerExam);
 
       res.status(201).redirect("/student/exam-hall");
     } catch (error) {
@@ -635,59 +685,55 @@ app.post(
   }
 );
 
-app.get("/teacher/studentlist", async (req, res) => {
-  if (req.session.isLoggedIn) {
-    try {
-      const examList = await exam.findOne({
-        _id: req.query.id,
+app.get("/teacher/studentlist", authenticateTeacherToken, async (req, res) => {
+  try {
+    const examList = await exam.findOne({
+      _id: req.query.id,
+    });
+    const records = await studentExam.find({
+      examcode: examList.examcode,
+    });
+    if (records.length == 0) {
+      res.redirect("/teacher/exam-history?error=No Submissions Yet");
+    } else {
+      res.render("studentlist", {
+        displaypicture: req.user.displaypicture,
+        subject: records[0].subject,
+        date: records[0].date,
+        records,
       });
-      const records = await studentExam.find({
-        examcode: examList.examcode,
-      });
-      if (records.length == 0) {
-        res.redirect("/teacher/exam-history?error=No Submissions Yet");
-      } else {
-        res.render("studentlist", {
-          displaypicture: req.session.displaypicture,
-          subject: records[0].subject,
-          date: records[0].date,
-          records,
-        });
-      }
-    } catch (error) {
-      console.log(error);
     }
-  } else {
-    res.redirect("/teacher");
+  } catch (error) {
+    console.log(error);
   }
 });
 
-app.get("/teacher/studentapaper", async (req, res) => {
-  if (req.session.isLoggedIn) {
+app.get(
+  "/teacher/studentapaper",
+  authenticateTeacherToken,
+  async (req, res) => {
     try {
-      console.log(req.session);
+      // console.log(req.session);
       const records = await studentExam.findOne({
         name: req.query.file,
       });
       res.render("studentapaper", {
         subject: records.subject,
         usn: records.usn,
-        name: records.name,
+        name: records.location,
         studentname: records.studentname,
         id: records._id,
-        displaypicture: req.session.displaypicture,
+        displaypicture: req.user.displaypicture,
       });
     } catch (error) {
       console.log(error);
     }
-  } else {
-    res.redirect("/teachers");
   }
-});
+);
 
-app.post("/update-marks", async (req, res) => {
+app.post("/update-marks", authenticateTeacherToken, async (req, res) => {
   try {
-    console.log(req.query.id);
+    // console.log(req.query.id);
     const updateMarks = await studentExam.updateOne(
       {
         _id: req.query.id,
@@ -697,16 +743,16 @@ app.post("/update-marks", async (req, res) => {
         evaluated: "YES",
       }
     );
-    console.log(updateMarks);
+    // console.log(updateMarks);
     res.redirect("/teacher/exam-history");
   } catch (error) {
     console.log(error);
   }
 });
 
-app.post("/delete-exam", async (req, res) => {
+app.post("/delete-exam", authenticateTeacherToken, async (req, res) => {
   try {
-    console.log(req.query.examcode);
+    // console.log(req.query.examcode);
     const deleteStudent = await studentExam.deleteMany({
       examcode: req.query.examcode,
     });

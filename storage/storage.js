@@ -51,7 +51,7 @@
 // };
 
 const express = require("express");
-const aws = require("aws-sdk");
+const { S3Client } = require("@aws-sdk/client-s3");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
 
@@ -61,13 +61,14 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-aws.config.update({
-  accessKeyId: "AKIAUSDD7GAQJZQ5CSHH",
-  secretAccessKey: "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",
-  region: "ap-southeast-2",
+const s3 = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
 });
 
-const s3 = new aws.S3();
 const upload = multer({
   storage: multerS3({
     s3: s3,
@@ -78,7 +79,7 @@ const upload = multer({
   }),
 });
 
-// Set up a route to handle file uploads
 app.post("/upload", upload.single("file"), (req, res) => {
   console.log(req.file);
+  res.send("File uploaded successfully");
 });
