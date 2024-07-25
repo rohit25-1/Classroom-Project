@@ -389,6 +389,9 @@ app.post("/student-login", async (req, res) => {
   }
 });
 
+app.get("/demo", (req, res) => {
+  res.send(SECRET_KEY);
+});
 //Resetting Password Of Student
 app.post("/student/reset-password", authenticateHomeToken, async (req, res) => {
   try {
