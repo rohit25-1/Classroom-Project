@@ -82,28 +82,30 @@ const authenticateStudentToken = async (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
     return res.redirect("/student");
+  } else {
+    const user = jwt.verify(token, SECRET_KEY);
+    // console.log(user);
+    const findinDB = await registerStudent.findOne({ usn: user.usn });
+    if (findinDB) {
+      req.user = user;
+      next();
+    } else res.redirect("/");
   }
-  const user = jwt.verify(token, SECRET_KEY);
-  // console.log(user);
-  const findinDB = await registerStudent.findOne({ usn: user.usn });
-  if (findinDB) {
-    req.user = user;
-    next();
-  } else res.redirect("/");
 };
 
 const authenticateTeacherToken = async (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
     return res.redirect("/teacher");
+  } else {
+    const user = jwt.verify(token, SECRET_KEY);
+    // console.log(user);
+    const findinDB = await registerTeacher.findOne({ tid: user.tid });
+    if (findinDB) {
+      req.user = user;
+      next();
+    } else res.redirect("/");
   }
-  const user = jwt.verify(token, SECRET_KEY);
-  // console.log(user);
-  const findinDB = await registerTeacher.findOne({ tid: user.tid });
-  if (findinDB) {
-    req.user = user;
-    next();
-  } else res.redirect("/");
 };
 
 const authenticateHomeToken = async (req, res, next) => {
