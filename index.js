@@ -313,21 +313,27 @@ app.post(
   async (req, res) => {
     try {
       location = await uploadFile(req.file);
-      const register = new registerStudent({
-        usn: req.body.usn,
-        name: req.body.name,
-        phonenumber: req.body.phno,
-        email: req.body.email,
-        dept: req.body.dept,
-        semester: req.body.semester,
-        password: req.body.password,
-        displaypicture: req.file.originalname,
-        location,
-      });
-      const registered = await register.save();
-      res.status(201).render("studentlogin", {
-        status: "Successfully Registered",
-      });
+      if (location) {
+        const register = new registerStudent({
+          usn: req.body.usn,
+          name: req.body.name,
+          phonenumber: req.body.phno,
+          email: req.body.email,
+          dept: req.body.dept,
+          semester: req.body.semester,
+          password: req.body.password,
+          displaypicture: req.file.originalname,
+          location,
+        });
+        const registered = await register.save();
+        res.status(201).render("studentlogin", {
+          status: "Successfully Registered",
+        });
+      } else {
+        res.render("createstudentaccount", {
+          error: "Error Registering",
+        });
+      }
     } catch (error) {
       if (error.code == 11000 && error.keyPattern.usn === 1) {
         res.render("createstudentaccount", {
